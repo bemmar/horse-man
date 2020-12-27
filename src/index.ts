@@ -26,7 +26,7 @@ const timeoutAsync = promisify(setTimeout);
   });
 
   const page = await browser.newPage();
-  await page.goto("https://www.everydollar.com/app/budget");
+  await page.goto(process.env.GOTO_PATH!);
 
   await timeoutAsync(5000);
 
