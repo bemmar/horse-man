@@ -14,7 +14,7 @@
     "dotenv": "^8.2.0",
     "mongodb": "^3.6.3",
     "plaid": "^8.1.2",
-    "puppeteer-core": "^5.5.0"
+    "puppeteer": "^5.5.0"
   },
   "devDependencies": {
     "@types/mongodb": "^3.5.34",

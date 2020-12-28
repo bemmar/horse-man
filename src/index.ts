@@ -1,5 +1,5 @@
 import transactionCollection from "./dbPool";
-import puppet from "puppeteer-core";
+import puppet from "puppeteer";
 import { promisify } from "util";
 import { Transaction as PlaidTransaction } from "plaid";
 
@@ -18,11 +18,18 @@ const timeoutAsync = promisify(setTimeout);
 
   console.log(`found ${incomplete.length} incomplete transactions`);
 
+  // incomplete.push({
+  //   date: "12/27/2020",
+  //   amount: 100,
+  //   name: "test",
+  //   transaction_id: "dunno"
+  // } as any);
+
   if (incomplete.length === 0) process.exit(0);
 
   const browser = await puppet.launch({
-    headless: false,
-    executablePath: process.env.BROWSER_PATH
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
 
   const page = await browser.newPage();
@@ -42,8 +49,15 @@ const timeoutAsync = promisify(setTimeout);
 
   await timeoutAsync(5 * 1000);
 
-  await page.click("#Modal_close");
-  await timeoutAsync(1 * 1000);
+  if (
+    await page.waitForSelector("#Modal_close", {
+      timeout: 2 * 1000
+    })
+  ) {
+    await page.click("#Modal_close");
+    await timeoutAsync(1 * 1000);
+  }
+
   await page.click(".IconTray-icon--pulse");
   await timeoutAsync(1 * 1000);
 
