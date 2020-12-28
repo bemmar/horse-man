@@ -2,6 +2,7 @@ import transactionCollection from "./dbPool";
 import puppet from "puppeteer";
 import { promisify } from "util";
 import { Transaction as PlaidTransaction } from "plaid";
+import express from "express";
 
 interface Transaction extends PlaidTransaction {
   complete?: boolean;
@@ -9,7 +10,7 @@ interface Transaction extends PlaidTransaction {
 
 const timeoutAsync = promisify(setTimeout);
 
-(async function () {
+async function run() {
   const collection = await transactionCollection();
 
   const incomplete = await collection
@@ -25,7 +26,7 @@ const timeoutAsync = promisify(setTimeout);
   //   transaction_id: "dunno"
   // } as any);
 
-  if (incomplete.length === 0) process.exit(0);
+  if (incomplete.length === 0) return;
 
   const browser = await puppet.launch({
     headless: true,
@@ -93,6 +94,20 @@ const timeoutAsync = promisify(setTimeout);
   }
 
   await page.close();
+}
 
-  process.exit(0);
-})();
+const app = express();
+
+app.get("*", async (_req, res) => {
+  try {
+    await run();
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
+app.listen(process.env.PORT, () => {
+  console.log("app started on port:", process.env.PORT);
+});
