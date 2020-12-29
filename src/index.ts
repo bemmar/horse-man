@@ -82,7 +82,7 @@ const timeoutAsync = promisify(setTimeout);
     await page.keyboard.type(transaction.date, {
       delay: 100
     });
-    await page.type("#input-6", `${transaction.name ?? transaction.merchant_name} (auto)`, {
+    await page.type("#input-6", `${transaction.name ?? transaction.merchant_name}*`, {
       delay: 100
     });
     await page.click("#TransactionModal_submit");
