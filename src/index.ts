@@ -50,13 +50,17 @@ async function run() {
 
   await timeoutAsync(5 * 1000);
 
-  if (
-    await page.waitForSelector("#Modal_close", {
-      timeout: 2 * 1000
-    })
-  ) {
-    await page.click("#Modal_close");
-    await timeoutAsync(1 * 1000);
+  try {
+    if (
+      await page.waitForSelector("#Modal_close", {
+        timeout: 2 * 1000
+      })
+    ) {
+      await page.click("#Modal_close");
+      await timeoutAsync(1 * 1000);
+    }
+  } catch (error) {
+    console.log("modal didn't need to be closed");
   }
 
   await page.click(".IconTray-icon--pulse");
@@ -98,7 +102,8 @@ async function run() {
 
 const app = express();
 
-app.get("*", async (_req, res) => {
+app.get("/trans", async (req, res) => {
+  console.log(req.path);
   try {
     await run();
     res.sendStatus(200);
@@ -111,3 +116,5 @@ app.get("*", async (_req, res) => {
 app.listen(process.env.PORT, () => {
   console.log("app started on port:", process.env.PORT);
 });
+
+(async () => await run())();
