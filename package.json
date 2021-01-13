@@ -14,13 +14,16 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongodb": "^3.6.3",
+    "nodemailer": "^6.4.17",
     "plaid": "^8.1.2",
-    "puppeteer": "^5.5.0"
+    "puppeteer": "^5.5.0",
+    "serialize-error": "^8.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
     "@types/mongodb": "^3.5.34",
     "@types/node": "^14.0.14",
+    "@types/nodemailer": "^6.4.0",
     "@types/puppeteer-core": "^5.4.0",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
